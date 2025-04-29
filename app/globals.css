@@ -1,26 +1,339 @@
-@import "tailwindcss";
+@import url('https://use.typekit.net/abcd123.css'); /* Solo una vez, con tu kit real */
+@import url('https://use.typekit.net/[your-kit-code].css'); /* Para Termina */
+@import url('https://use.typekit.net/[your-kit-code].css'); /* Para Bodoni 72 */
+@import url('https://use.typekit.net/[your-kit-code].css'); /* Para Museo Sans */
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --primary: #672421;
+    --secondary: #8b9696;
+    --background: #ffffff;
+    --text: #2c2a28;
+  }
+
+  .dark {
+    --primary: #8b9696;
+    --secondary: #672421;
+    --background: #2c2a28;
+    --text: #eae5df;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased;
+    font-family: "Inter", sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "termina", sans-serif;
+  }
+
+  h1 {
+    @apply text-5xl md:text-7xl font-bold tracking-[-0.02em] leading-[110%];
+  }
+
+  h2 {
+    @apply text-4xl md:text-5xl font-bold tracking-[-0.01em] leading-[120%];
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-bold tracking-[-0.005em] leading-[130%];
+  }
+
+  p {
+    @apply text-base md:text-lg leading-[150%];
+  }
+
+  .termina {
+    font-family: "termina", sans-serif;
+    @apply tracking-[0.2em];
+  }
+
+  .body-text {
+    font-family: "museo-sans", sans-serif;
+    @apply normal-case;
+  }
+
+  .arrow-link {
+    @apply inline-flex items-center gap-2 termina text-sm tracking-[0.2em]
+           px-8 py-4 border border-current rounded-full
+           transition-all duration-300;
+  }
+
+  .arrow-link::after {
+    content: '→';
+    @apply ml-2 transform transition-transform duration-300;
+  }
+
+  .arrow-link:hover::after {
+    @apply translate-x-2;
+  }
+
+  .section-number {
+    @apply text-sm tracking-[0.2em] mb-8 block opacity-50;
+  }
+
+  .line-decoration {
+    @apply absolute bg-[#672421] opacity-20;
+  }
+
+  .dark .line-decoration {
+    @apply bg-[#8b9696];
+  }
+
+  .line-vertical {
+    @apply line-decoration w-[1px] h-32;
+  }
+
+  .line-horizontal {
+    @apply line-decoration h-[1px] w-32;
+  }
+
+  .bg-grid-pattern {
+    background-image: linear-gradient(to right, var(--text) 1px, transparent 1px),
+                      linear-gradient(to bottom, var(--text) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container {
+    @apply max-w-[1400px] mx-auto;
+  }
+
+  .section-spacing {
+    @apply py-16 md:py-24;
+  }
+
+  .btn-primary {
+    @apply px-8 py-4 termina text-sm tracking-[0.2em] transition-all duration-300
+           bg-[#672421] text-white hover:bg-[#672421]/90 rounded-full;
+  }
+
+  .dark .btn-primary {
+    @apply bg-[#8b9696] text-[#2c2a28] hover:bg-[#8b9696]/90;
+  }
+
+  .btn-secondary {
+    @apply border border-[#672421] text-[#672421] px-8 py-4 rounded-full
+           hover:bg-[#672421] hover:text-white transition-all duration-300;
+  }
+
+  .card {
+    @apply bg-white rounded-3xl shadow-[0px_4px_12px_rgba(0,0,0,0.06)] 
+           p-8 transition-all duration-300 hover:shadow-lg;
+  }
+
+  .grain {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .grain::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/png;base64,/* base64 noise texture */');
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
+  .nav-link {
+    @apply text-sm tracking-widest uppercase text-[#2c2a28] 
+           hover:text-[#672421] transition-all duration-300;
+  }
+
+  .fade-up {
+    @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;
+  }
+
+  .fade-up.visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .slide-in {
+    @apply opacity-0 -translate-x-8 transition-all duration-700 ease-out;
+  }
+
+  .slide-in.visible {
+    @apply opacity-100 translate-x-0;
+  }
+
+  .section-number::before {
+    content: '';
+    @apply w-12 h-[1px] bg-[#672421] opacity-20 mr-4;
+  }
+
+  .dark .section-number::before {
+    @apply bg-[#8b9696];
+  }
 }
+
+@layer utilities {
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+
+  .hover-lift:hover {
+    @apply transform -translate-y-1 shadow-lg;
+  }
+
+  .termina {
+    font-family: "termina", sans-serif;
+    @apply uppercase tracking-[0.2em];
+  }
+
+  .text-primary {
+    color: var(--primary);
+  }
+
+  .bg-primary {
+    background-color: var(--primary);
+  }
+
+  .border-primary {
+    border-color: var(--primary);
+  }
+
+  .grid-lines {
+    @apply fixed inset-0 pointer-events-none;
+    background-image: 
+      linear-gradient(to right, currentColor 1px, transparent 1px),
+      linear-gradient(to bottom, currentColor 1px, transparent 1px);
+    background-size: 100px 100px;
+    opacity: 0.03;
+  }
+
+  .vertical-line {
+    @apply absolute w-[1px] h-full bg-current opacity-5;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from { 
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.8s ease forwards;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.8s ease forwards;
+}
+
+/* Delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+
+/* Arrow link animation */
+.arrow-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.arrow-link::after {
+  content: '→';
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.arrow-link:hover::after {
+  transform: translateX(8px);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Añadir estas clases */
+.grid-lines {
+  background-image: linear-gradient(to right, var(--text) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--text) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.vertical-line {
+  @apply fixed top-0 bottom-0 w-[1px] bg-[#672421] opacity-[0.03] z-[-1];
+}
+
+.section-number {
+  @apply text-[300px] font-bold text-[#672421] opacity-[0.07] absolute -left-8 top-1/2 -translate-y-1/2 pointer-events-none;
+}
+
+/* Cursor personalizado */
+.custom-cursor {
+  @apply fixed w-8 h-8 rounded-full border-2 border-[#672421] pointer-events-none z-50 mix-blend-difference;
+  transform: translate(-50%, -50%);
+}
+
+.custom-cursor.hover {
+  @apply w-16 h-16 bg-[#672421] bg-opacity-10;
+}
+
+/* Asegurarse que los textos cambien según el tema */
+.dark .text-theme {
+  color: var(--text);
+}
+
+.light .text-theme {
+  color: var(--text);
+}
+
+.text-mystic-maze {
+  color: #6B728E;
+}
+
+.dark .text-mystic-maze {
+  color: #8b9696;
+}
+

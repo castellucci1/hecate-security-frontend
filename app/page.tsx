@@ -1,103 +1,224 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { motion } from 'framer-motion';
+import { useTheme } from './context/ThemeContext';
+import Link from 'next/link';
+import Image from 'next/image';
+import Navbar from './components/Navbar';
+
+export default function HomePage() {
+  const { theme } = useTheme();
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#2c2a28]' : 'bg-white'}`}>
+      <Navbar />
+      {/* Background Grid */}
+      <div className={`grid-lines ${theme === 'dark' ? 'text-[#eae5df]' : 'text-[#2c2a28]'}`} />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      {/* Vertical Lines */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="vertical-line left-1/4" />
+        <div className="vertical-line left-2/4" />
+        <div className="vertical-line left-3/4" />
+      </div>
+
+      {/* Main Content */}
+      <main className="relative">
+        {/* Hero Section */}
+        <section className="min-h-screen flex items-center">
+          <div className="container mx-auto px-8">
+            <div className="grid grid-cols-12 gap-16 items-center">
+              {/* Left Column */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="col-span-12 lg:col-span-6 space-y-8"
+              >
+                <Image
+                  src={theme === 'dark' ? '/images/Hecate-Logos-32.png' : '/images/Hecate-Logos-27.png'}
+                  alt="Hécate Security"
+                  width={400}
+                  height={160}
+                  priority
+                  className="w-auto h-auto"
+                />
+                <p className={`text-xl md:text-2xl font-light
+                  ${theme === 'dark' ? 'text-[#8b9696]' : 'text-[#672421]'}`}
+                >
+                  Formación especializada en ciberseguridad
+                </p>
+                <div className="flex gap-6">
+                  <Link
+                    href="/inscripcion"
+                    className="btn-primary"
+                  >
+                    INSCRIBIRSE →
+                  </Link>
+                  <Link
+                    href="/curso"
+                    className={`arrow-link ${
+                      theme === 'dark' 
+                        ? 'text-[#8b9696] border-[#8b9696]' 
+                        : 'text-[#672421] border-[#672421]'
+                    }`}
+                  >
+                    VER PROGRAMA
+                  </Link>
+                </div>
+              </motion.div>
+
+              {/* Right Column */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="col-span-12 lg:col-span-6"
+              >
+                <div className="relative aspect-square">
+                  <Image
+                    src="/images/Hécate Logos-01.png"
+                    alt="Cybersecurity"
+                    fill
+                    className="object-cover rounded-lg"
+                    priority
+                  />
+                  <div className="absolute inset-0 border-2 border-[#672421] rounded-lg transform translate-x-4 translate-y-4 -z-10 opacity-20" />
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Metodología Section */}
+        <section className="py-32">
+          <div className="container mx-auto px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-16"
+            >
+              <span className="section-number">01</span>
+              <h2 className={`text-4xl font-bold mb-4 termina
+                ${theme === 'dark' ? 'text-[#eae5df]' : 'text-[#2c2a28]'}`}
+              >
+                METODOLOGÍA
+              </h2>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {metodologia.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className={`p-8 border group
+                    ${theme === 'dark'
+                      ? 'border-[#8b9696]/20 hover:border-[#8b9696]'
+                      : 'border-[#672421]/20 hover:border-[#672421]'
+                    }`}
+                >
+                  <h3 className={`text-xl font-bold mb-4 termina
+                    ${theme === 'dark' ? 'text-[#eae5df]' : 'text-[#2c2a28]'}`}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className={`font-light
+                    ${theme === 'dark' ? 'text-[#8b9696]' : 'text-[#672421]'}`}
+                  >
+                    {item.description}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Programa Section */}
+        <section className="py-32">
+          <div className="container mx-auto px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-16"
+            >
+              <span className="section-number">02</span>
+              <h2 className={`text-4xl font-bold mb-4 termina
+                ${theme === 'dark' ? 'text-[#eae5df]' : 'text-[#2c2a28]'}`}
+              >
+                PROGRAMA
+              </h2>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+              {programa.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className={`p-8 border group
+                    ${theme === 'dark'
+                      ? 'border-[#8b9696]/20 hover:border-[#8b9696]'
+                      : 'border-[#672421]/20 hover:border-[#672421]'
+                    }`}
+                >
+                  <h3 className={`text-xl font-bold mb-4 termina
+                    ${theme === 'dark' ? 'text-[#eae5df]' : 'text-[#2c2a28]'}`}
+                  >
+                    {item.title}
+                  </h3>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
+
+const metodologia = [
+  {
+    title: '100% VIRTUAL',
+    description: 'Clases teóricas grabadas (3 horas semanales).',
+  },
+  {
+    title: 'PRÁCTICAS',
+    description: 'Prácticas autogestionadas (1 hora y 30 minutos semanales).',
+  },
+  {
+    title: 'SESIONES Q&A',
+    description: 'Sesiones opcionales (2 horas semanales), donde podés resolver dudas y profundizar los temas.',
+  },
+];
+
+const programa = [
+  {
+    title: 'FUNDAMENTOS',
+  },
+  {
+    title: 'ANÁLISIS Y RECOLECCIÓN DE INFORMACIÓN',
+  },
+  {
+    title: 'GESTIÓN Y DOCUMENTACIÓN DE PROYECTOS',
+  },
+  {
+    title: 'SEGURIDAD COLABORATIVA Y CULTURA ORGANIZACIONAL',
+  },
+  {
+    title: 'IDENTIFICACIÓN Y MITIGACIÓN DE RIESGOS',
+  },
+  {
+    title: 'ARMADO DE ENTORNOS',
+  },
+  {
+    title: 'ETHICAL HACKING Y SEGURIDAD DE APLICACIONES',
+  },
+  {
+    title: 'PROCESO DE INSERCIÓN LABORAL',
+  },
+];
