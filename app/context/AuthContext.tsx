@@ -29,13 +29,20 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   const checkAuth = async () => {
     try {
+      setIsLoading(true);
       const token = localStorage.getItem('accessToken');
       if (!token) {
         setUser(null);
+        setIsLoading(false);
         return;
       }
 
@@ -51,6 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(null);
           router.push('/login');
         }
+        setIsLoading(false);
         return;
       }
 
@@ -59,6 +67,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error('Error checking auth:', error);
       setUser(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -120,10 +130,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       router.push('/login');
     }
   };
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout, checkAuth }}>

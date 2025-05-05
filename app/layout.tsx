@@ -2,6 +2,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import type { Metadata } from 'next';
 import ClientLayout from './components/ClientLayout';
+import Background from './components/Background';
+import Loader from './components/Loader';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -10,9 +12,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Cybersecurity Classroom',
+  title: 'Hécate - Academia de Seguridad de la Información',
   description: 'Una plataforma para aprender ciberseguridad',
-  authors: [{ name: 'Cybersecurity Team' }],
+  authors: [{ name: 'Hécate Team' }],
   keywords: ['cybersecurity', 'education', 'learning platform'],
 };
 
@@ -23,7 +25,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning className={inter.variable}>
-      <body className={`${inter.className} antialiased`}>
+      <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+      </head>
+      <body className={`${inter.className} antialiased bg-[#111216] text-white`}>
+        <Background />
+        <Loader />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

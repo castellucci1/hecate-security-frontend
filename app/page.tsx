@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 import { useTheme } from './context/ThemeContext';
 import Link from 'next/link';
 import Image from 'next/image';
-import Navbar from './components/Navbar';
+// import Navbar from './components/Navbar';
 
 export default function HomePage() {
   const { theme } = useTheme();
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#2c2a28]' : 'bg-white'}`}>
-      <Navbar />
+      {/* <Navbar /> */}
       {/* Background Grid */}
       <div className={`grid-lines ${theme === 'dark' ? 'text-[#eae5df]' : 'text-[#2c2a28]'}`} />
 

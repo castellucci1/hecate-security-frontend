@@ -1,18 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import PageLayout from '../components/PageLayout';
-import { useTheme } from '../context/ThemeContext'
-import FadeIn from '../components/FadeIn'
+import React, { useState } from 'react';
+import Navbar from '../components/Navbar';
 
 interface FAQ {
   question: string;
-  answer: string | JSX.Element;
+  answer: string | React.ReactNode;
 }
 
 export default function FAQsPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const { theme } = useTheme()
 
   const faqs: FAQ[] = [
     {
@@ -137,32 +134,23 @@ export default function FAQsPage() {
   ];
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#2c2a28] text-[#eae5df]' : 'bg-white text-[#2c2a28]'}`}>
-      <div className="container section-spacing">
-        <FadeIn>
-          <h1 className="text-5xl termina font-bold text-center mb-16">
-            Preguntas Frecuentes sobre Hécate Security
-          </h1>
-        </FadeIn>
-        <div className="max-w-2xl mx-auto space-y-6">
+    <div className="min-h-screen relative">
+      <Navbar />
+      <div className="container mx-auto px-8 py-32 z-10">
+        <h1 className="text-4xl font-bold mb-12 text-center termina uppercase">TUS PREGUNTAS, NUESTRAS RESPUESTAS.</h1>
+        <div className="max-w-3xl mx-auto space-y-4">
           {faqs.map((faq, index) => (
-            <FadeIn key={index} delay={index * 0.1}>
-              <div
-                className={`rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-lg
-                  ${theme === 'dark'
-                    ? 'bg-[#23211e] border-[#eae5df]/10'
-                    : 'bg-white border-[#672421]/10'
-                  }`}
+            <div
+              key={index}
+              className="border border-[#23242a] rounded-xl overflow-hidden"
               >
                 <button
-                  className="w-full px-6 py-4 text-left flex justify-between items-center"
+                className="w-full px-6 py-4 text-left bg-[#181A20] hover:bg-[#23242a] transition-colors duration-200 flex justify-between items-center"
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 >
-                  <span className="text-xl termina font-medium">{faq.question}</span>
+                <h2 className="text-lg font-normal termina uppercase">{faq.question}</h2>
                   <svg
-                    className={`w-6 h-6 text-[#672421] transition-transform duration-300 ${
-                      openIndex === index ? 'rotate-180' : ''
-                    }`}
+                  className={`w-6 h-6 text-[#bdbdbd] transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -170,15 +158,12 @@ export default function FAQsPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div
-                  className={`px-6 transition-all duration-300 ${
-                    openIndex === index ? 'py-4 opacity-100' : 'h-0 opacity-0 overflow-hidden'
-                  }`}
-                >
-                  <div className="body-text">{faq.answer}</div>
+              {openIndex === index && (
+                <div className="px-6 py-4 bg-[#181A20] border-t border-[#23242a]">
+                  <div className="text-[#bdbdbd]">{faq.answer}</div>
                 </div>
+              )}
               </div>
-            </FadeIn>
           ))}
         </div>
       </div>

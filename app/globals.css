@@ -47,8 +47,21 @@
     @apply text-2xl md:text-3xl font-bold tracking-[-0.005em] leading-[130%];
   }
 
-  p {
-    @apply text-base md:text-lg leading-[150%];
+  p, .arise-text {
+    font-family: "termina", sans-serif;
+    color: #e0e0e0;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.18);
+    margin-bottom: 1.5em;
+    font-weight: 400;
+  }
+
+  .arise-highlight {
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(255,255,255,0.08);
   }
 
   .termina {
@@ -335,5 +348,11 @@
 
 .dark .text-mystic-maze {
   color: #8b9696;
+}
+
+/* Fix de emergencia: ningún overlay global debe bloquear clicks */
+.fixed.inset-0,
+.absolute.inset-0 {
+  pointer-events: none !important;
 }
 

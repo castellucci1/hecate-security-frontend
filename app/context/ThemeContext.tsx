@@ -1,94 +1,53 @@
 'use client'
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext } from 'react'
 import { ThemeProvider as MUIThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 
-type ThemeMode = 'light' | 'dark'
-
-interface ThemeContextType {
-  theme: ThemeMode
-  mounted: boolean
-  toggleTheme: () => void
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
-
-const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#672421',
-    },
-    secondary: {
-      main: '#8b9696',
-    },
-    background: {
-      default: '#ffffff',
-      paper: '#ffffff',
-    },
-    text: {
-      primary: '#2c2a28',
-      secondary: '#8b9696',
-    },
-  },
-})
-
-const darkTheme = createTheme({
+const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#8b9696',
+      main: '#fff',
     },
     secondary: {
-      main: '#672421',
+      main: '#8b9696', // Color gris azulado
     },
     background: {
-      default: '#2c2a28',
-      paper: '#23211e',
+      default: '#111216',
+      paper: '#181A20',
     },
     text: {
-      primary: '#eae5df',
-      secondary: '#8b9696',
+      primary: '#fff',
+      secondary: '#bdbdbd',
+    },
+  },
+  typography: {
+    fontFamily: 'Inter, Arial, sans-serif',
+    h1: {
+      fontWeight: 700,
+    },
+    h2: {
+      fontWeight: 600,
+    },
+    h3: {
+      fontWeight: 500,
+    },
+    body1: {
+      fontWeight: 400,
     },
   },
 })
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<ThemeMode>('light')
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as ThemeMode
-    if (savedTheme) {
-      setTheme(savedTheme)
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark')
-    }
-    setMounted(true)
-  }, [])
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
-    localStorage.setItem('theme', newTheme)
-  }
-
-  const currentTheme = theme === 'light' ? lightTheme : darkTheme
-
   return (
-    <ThemeContext.Provider value={{ theme, mounted, toggleTheme }}>
-      <MUIThemeProvider theme={currentTheme}>
+    <MUIThemeProvider theme={theme}>
         <CssBaseline />
         {children}
       </MUIThemeProvider>
-    </ThemeContext.Provider>
   )
 }
 
 export function useTheme() {
-  const context = useContext(ThemeContext)
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider')
-  }
-  return context
+  // Dummy hook for compatibility
+  return { theme: 'dark' }
 } 

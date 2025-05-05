@@ -5,7 +5,7 @@ import Link from 'next/link'
 export default function Footer() {
   const { theme } = useTheme()
   return (
-    <footer className={`py-16 border-t ${
+    <footer className={`py-12 border-t ${
       theme === 'dark' 
         ? 'border-[#eae5df]/10 text-[#eae5df]' 
         : 'border-[#2c2a28]/10 text-[#2c2a28]'

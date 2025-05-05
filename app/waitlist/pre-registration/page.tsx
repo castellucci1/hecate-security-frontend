@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { PreRegistrationForm } from '@/app/types/forms';
 
 export default function PreRegistrationPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState<PreRegistrationForm>({
     fullName: '',
     email: '',
@@ -11,29 +13,36 @@ export default function PreRegistrationPage() {
     source: 'other',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     
-    // Here you would add the API call to submit the form
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
-    
-    setIsSubmitted(true);
-    setIsSubmitting(false);
-  };
+    try {
+      const response = await fetch('/api/waitlist/pre', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-  if (isSubmitted) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <h2 className="text-2xl font-semibold text-dark-moon mb-4">¡Gracias por pre-inscribirte!</h2>
-        <p className="text-gray-600">
-          Te vamos a contactar con los próximos pasos. Revisá tu correo (y el spam, por las dudas).
-        </p>
-      </div>
-    );
-  }
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Error al enviar el formulario');
+      }
+
+      router.push('/waitlist/thank-you');
+    } catch (error) {
+      console.error('Error:', error);
+      setError(error instanceof Error ? error.message : 'Error al enviar el formulario');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
@@ -43,6 +52,12 @@ export default function PreRegistrationPage() {
         </h1>
         <p className="text-gray-600">Duración estimada: 1-2 minutos</p>
       </div>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md text-red-600">
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -74,77 +89,32 @@ export default function PreRegistrationPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            ¿Tenés experiencia en tecnología o seguridad de la información? *
-          </label>
-          <div className="space-y-2">
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="experience"
-                value="working_in_security"
-                checked={formData.experience === 'working_in_security'}
-                onChange={(e) => setFormData({ ...formData, experience: e.target.value as any })}
-                className="mr-2"
-              />
-              Sí, ya trabajo en el rubro
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="experience"
-                value="working_in_tech"
-                checked={formData.experience === 'working_in_tech'}
-                onChange={(e) => setFormData({ ...formData, experience: e.target.value as any })}
-                className="mr-2"
-              />
-              Sí, pero no en seguridad
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="experience"
-                value="no_experience"
-                checked={formData.experience === 'no_experience'}
-                onChange={(e) => setFormData({ ...formData, experience: e.target.value as any })}
-                className="mr-2"
-              />
-              No, pero me interesa mucho
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-4">
             ¿Cómo te enteraste del curso? *
           </label>
-          <select
-            value={formData.source}
-            onChange={(e) => setFormData({ ...formData, source: e.target.value as any })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-mystic-maze focus:border-transparent"
-          >
-            <option value="tiktok">TikTok</option>
-            <option value="instagram">Instagram</option>
-            <option value="linkedin">LinkedIn</option>
-            <option value="referral">Por una persona (referido)</option>
-            <option value="other">Otro</option>
-          </select>
-        </div>
-
-        {formData.source === 'referral' && (
-          <div>
-            <label htmlFor="referralSource" className="block text-sm font-medium text-gray-700 mb-1">
-              Si alguien te recomendó el curso, dejá su nombre o usuario:
-            </label>
-            <input
-              type="text"
-              id="referralSource"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-mystic-maze focus:border-transparent"
-              value={formData.referralSource || ''}
-              onChange={(e) => setFormData({ ...formData, referralSource: e.target.value })}
-            />
+          <div className="space-y-3">
+            {[
+              { value: 'tiktok', label: 'TikTok' },
+              { value: 'instagram', label: 'Instagram' },
+              { value: 'linkedin', label: 'LinkedIn' },
+              { value: 'referral', label: 'Por una persona (referido)' },
+              { value: 'other', label: 'Otro' }
+            ].map((option) => (
+              <label key={option.value} className="flex items-center">
+                <input
+                  type="radio"
+                  name="source"
+                  value={option.value}
+                  checked={formData.source === option.value}
+                  onChange={(e) => setFormData({ ...formData, source: e.target.value as ReferralSource })}
+                  className="mr-3 text-mystic-maze focus:ring-mystic-maze"
+                  required
+                />
+                <span className="text-gray-700">{option.label}</span>
+              </label>
+            ))}
           </div>
-        )}
+        </div>
 
         {formData.source === 'other' && (
           <div>
@@ -157,6 +127,21 @@ export default function PreRegistrationPage() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-mystic-maze focus:border-transparent"
               value={formData.otherSource || ''}
               onChange={(e) => setFormData({ ...formData, otherSource: e.target.value })}
+            />
+          </div>
+        )}
+
+        {formData.source === 'referral' && (
+          <div>
+            <label htmlFor="referrerName" className="block text-sm font-medium text-gray-700 mb-1">
+              Si alguien te recomendó el curso, dejá su nombre o usuario (si lo sabés):
+            </label>
+            <input
+              type="text"
+              id="referrerName"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-mystic-maze focus:border-transparent"
+              value={formData.referrerName || ''}
+              onChange={(e) => setFormData({ ...formData, referrerName: e.target.value })}
             />
           </div>
         )}
